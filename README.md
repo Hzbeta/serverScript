@@ -1,0 +1,2 @@
+# serverScript
+some script
