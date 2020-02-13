@@ -32,7 +32,7 @@ port=$1
 
 sed -i "s/#Port 22/Port ${port}/" /etc/ssh/sshd_config
 semanage port -a -t ssh_port_t -p tcp "${port}"
-sudo firewall-cmd --permanent --zone=public --add-port="${port}"/tcp
+firewall-cmd --permanent --zone=public --add-port="${port}"/tcp
 firewall-cmd --reload
 systemctl restart sshd.service
 
