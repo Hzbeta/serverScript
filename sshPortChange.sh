@@ -18,7 +18,7 @@ Check_is_Root_in_CentOS() {
         echo "[Error] This script can only run in CentOS"
         exit 1
     fi
-    (rpm -q centos-release | grep '\-6\-') >/dev/null && (echo "[Error] This script can only run in CentOS 7+" && exit 1)
+    (rpm -q centos-release | grep 'release\-6') >/dev/null && (echo "[Error] This script can only run in CentOS 7+" && exit 1)
 }
 
 Check_is_Root_in_CentOS
