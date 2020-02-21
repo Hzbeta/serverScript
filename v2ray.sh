@@ -60,4 +60,5 @@ fi
 firewall-cmd --permanent --zone=public --add-port="${port}"/tcp
 firewall-cmd --reload
 
+systemctl enable v2ray
 systemctl start v2ray
