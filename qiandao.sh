@@ -30,7 +30,7 @@ port=${1}
 
 yum install podman -y
 
-podman create -d -p "${port}":80 --name qiandao fangzhengjin/qiandao
+podman create -d -p "${port}":80 --network=host --name qiandao fangzhengjin/qiandao
 
 cat>/usr/lib/systemd/system/qiandao.service<<EOF
 [Unit]
@@ -40,11 +40,10 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/podman start qiandao
+ExecStart=/usr/bin/podman start -a qiandao
 ExecStop=/usr/bin/podman stop qiandao
-ExecReload=/usr/bin/podman restart qiandao
-RestartSec=10
-Restart=always
+RestartSec=10s
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
