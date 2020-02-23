@@ -62,23 +62,19 @@ function config_file() {
 }
 
 function install_aria2() {
-    podman create -d \
-        --name aria2 \
-        --log-opt max-size=1m \
-        -p "${aria2_RPC_port}":6800 \
-        -e PUID="${UID}" \
-        -e PGID="${GID}" \
-        -e RPC_SECRET="${password}" \
-        -v "${cloud_download_config_dir}":/config \
-        -v "${download_dir}":/downloads \
-        p3terx/aria2-pro
+    curl -o aria2.sh -s -L https://raw.githubusercontent.com/P3TERX/aria2.sh/master/aria2.sh
+    echo -e "1\n\n" | bash aria2.sh
+    echo -e "7\n4\n${password}\n${aria2_RPC_port}\n${download_dir}\n" | bash aria2.sh
+    echo -e "11" | bash aria2.sh
+    /etc/init.d/aria2 stop
+    rm -f aria2.sh
 }
 
 function install_filebrowser() {
     curl -fsSL https://filebrowser.xyz/get.sh | bash
     filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config init --locale zh-cn
     filebrowser -d "${cloud_download_config_dir}"/filebrowser.db users add "${username}" "${password}" --perm.admin
-    cat >"${cloud_download_config_dir}"/filebrowser.json <<-EOF
+    cat >"${cloud_download_config_dir}"/filebrowser.json <<EOF
 {
     "port": ${filefrowser_port},
     "baseURL": "",
@@ -117,14 +113,14 @@ WantedBy=multi-user.target
 EOF
     cat >/usr/lib/systemd/system/aria2.service <<EOF
 [Unit]
-Description=podman aria2
+Description=aria2
 After=network.target
 After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/podman start -a aria2
-ExecStop=/usr/bin/podman stop aria2
+ExecStart=/usr/local/bin/aria2c --conf-path=/root/.aria2/aria2.conf
+ExecStop=/etc/init.d/aria2 stop
 RestartSec=10s
 Restart=on-failure
 
