@@ -127,7 +127,6 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-
     systemctl enable aria2
     systemctl enable filebrowser
     systemctl start aria2
@@ -145,4 +144,4 @@ config_firewall
 config_systemd
 
 echo "FileBrowser http://your-ip:${filefrowser_port}"
-echo "aria2 RPC http://your ip:${aria2_RPC_port}/jsonrpc"
+echo "aria2 RPC http://your-ip:${aria2_RPC_port}/jsonrpc"
