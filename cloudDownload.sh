@@ -76,14 +76,18 @@ function install_aria2() {
 
 function install_filebrowser() {
     curl -fsSL https://filebrowser.xyz/get.sh | bash
-    filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config init
-    filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config set \
-        --address 0.0.0.0 \
-        --port "${filefrowser_port}" \
-        --locale zh-cn \
-        --log "${cloud_download_config_dir}"/filebrowser.log \
-        --root "${download_dir}"
+    filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config init --locale zh-cn
     filebrowser -d "${cloud_download_config_dir}"/filebrowser.db users add "${username}" "${password}" --perm.admin
+    cat >"${cloud_download_config_dir}"/filebrowser.json <<-EOF
+{
+    "port": ${filefrowser_port},
+    "baseURL": "",
+    "address": "0.0.0.0",
+    "log": "stdout",
+    "database": "${cloud_download_config_dir}/filebrowser.db",
+    "root": "${download_dir}"
+}
+EOF
 }
 
 function config_firewall() {
@@ -97,12 +101,14 @@ function config_firewall() {
 function config_systemd() {
     cat >/usr/lib/systemd/system/filebrowser.service <<EOF
 [Unit]
-Description=filebrowser server
+Description=Filebrowser Service
 After=network.target
+Wants=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/filebrowser -d "${cloud_download_config_dir}"/filebrowser.db
+PIDFile=/var/run/filebrowser.pid
+ExecStart=/usr/local/bin/filebrowser -c ${cloud_download_config_dir}/filebrowser.json
 RestartSec=10s
 Restart=on-failure
 
