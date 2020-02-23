@@ -74,9 +74,10 @@ function install_aria2() {
         p3terx/aria2-pro
 }
 
-function install_filebroswer() {
+function install_filebrowser() {
     curl -fsSL https://filebrowser.xyz/get.sh | bash
-    filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config init \
+    filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config init
+    filebrowser -d "${cloud_download_config_dir}"/filebrowser.db config set \
         --address 0.0.0.0 \
         --port "${filefrowser_port}" \
         --locale zh-cn \
@@ -96,7 +97,7 @@ function config_firewall() {
 function config_systemd() {
     cat >/usr/lib/systemd/system/filebrowser.service <<EOF
 [Unit]
-Description=filebroswer server
+Description=filebrowser server
 After=network.target
 
 [Service]
@@ -126,9 +127,9 @@ WantedBy=multi-user.target
 EOF
 
     systemctl enable aria2
-    systemctl enable filebroswer
+    systemctl enable filebrowser
     systemctl start aria2
-    systemctl start filebroswer
+    systemctl start filebrowser
 
 }
 
@@ -137,7 +138,7 @@ deal_args "$@"
 install_dep
 config_file
 install_aria2
-install_filebroswer
+install_filebrowser
 config_firewall
 config_systemd
 
