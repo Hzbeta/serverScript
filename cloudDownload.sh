@@ -149,7 +149,7 @@ split=16
 # 单个任务下载速度限制, 默认:0
 #max-download-limit=0
 # 整体上传速度限制, 运行时可修改, 默认:0
-max-overall-upload-limit=1M
+max-overall-upload-limit=512K
 # 单个任务上传速度限制, 默认:0
 #max-upload-limit=1000
 # 禁用IPv6, 默认:false
@@ -209,7 +209,7 @@ seed-time=10
 # 继续之前的BT任务时, 无需再次校验, 默认:false
 #bt-seed-unverified=true
 # 保存磁力链接元数据为种子文件(.torrent文件), 默认:false
-bt-save-metadata=true
+bt-save-metadata=false
 # 加载已保存的元数据文件，默认:false
 bt-load-saved-metadata=true
 # 删除未选择文件，默认:false
