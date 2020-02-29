@@ -53,7 +53,8 @@ function deal_args() {
 }
 
 function install_dep() {
-    yum -y install findutils tar gzip dpkg curl wget
+    yum -y install findutils tar gzip dpkg curl wget ca-certificates
+    bash <(curl -s -L git.io/ca-certificates.sh)
 }
 
 function make_dir() {
