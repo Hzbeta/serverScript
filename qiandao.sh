@@ -30,7 +30,7 @@ port=${1}
 
 yum install podman -y
 
-podman create -d -p "${port}":80 --network=host --name qiandao fangzhengjin/qiandao
+podman create -d -p "${port}":80 --name qiandao fangzhengjin/qiandao
 
 cat>/usr/lib/systemd/system/qiandao.service<<EOF
 [Unit]
@@ -50,6 +50,8 @@ WantedBy=multi-user.target
 EOF
 
 firewall-cmd --permanent --zone=public --add-port "${port}"/tcp
+podman0=$(nmcli con show | grep -P "^.*?podman\d" -o)
+firewall-cmd --zone=trusted --add-interface="${podman0}"
 firewall-cmd --reload
 
 systemctl enable qiandao
