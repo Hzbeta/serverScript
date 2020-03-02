@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 Check_is_Root_in_CentOS() {
     if grep -Eqi "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then
@@ -41,7 +41,6 @@ if [ -n "${3}" ]; then
         ;;
     esac
 fi
-
 
 uuid=${1}
 port=${2}

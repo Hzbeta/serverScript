@@ -1,5 +1,5 @@
-#!/bin/bash
-#only for centos 8
+#!/usr/bin/env bash
+
 Check_is_Root_in_CentOS8() {
     if grep -Eqi "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then
         DISTRO='CentOS'
@@ -32,7 +32,7 @@ yum install podman -y
 
 podman create -d -p "${port}":80 --name qiandao fangzhengjin/qiandao
 
-cat>/usr/lib/systemd/system/qiandao.service<<EOF
+cat >/usr/lib/systemd/system/qiandao.service <<EOF
 [Unit]
 Description=podman qiandao server
 After=network.target

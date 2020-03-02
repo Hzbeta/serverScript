@@ -1,5 +1,4 @@
-#!/bin/bash
-# Only for CentOS 7+
+#!/usr/bin/env bash
 
 Check_is_Root_in_CentOS() {
     if grep -Eqi "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then

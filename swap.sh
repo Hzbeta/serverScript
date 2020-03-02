@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 [[ $EUID -ne 0 ]] && echo "[Error] This script must be run as root" && exit 1
 [[ -d "/proc/vz" ]] && echo -e "OpenVZ is not supported!" && exit 1
 
