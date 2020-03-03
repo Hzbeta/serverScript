@@ -50,8 +50,7 @@ WantedBy=multi-user.target
 EOF
 
 firewall-cmd --permanent --zone=public --add-port "${port}"/tcp
-podman0=$(nmcli con show | grep -P "^.*?podman\d" -o)
-firewall-cmd --zone=trusted --add-interface="${podman0}"
+firewall-cmd --permanent --zone=trusted --add-interface=cni-podman0
 firewall-cmd --reload
 
 systemctl enable qiandao
