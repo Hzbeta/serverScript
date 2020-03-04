@@ -52,7 +52,6 @@ fi
 
 #limit cpu
 yum install -y libcgroup libcgroup-tools
-systemctl enable cgconfig
 echo """
 group dstserver {
     cpu {
@@ -60,7 +59,8 @@ group dstserver {
     }
 }
 """ >>/etc/cgconfig.conf
-systemctl restart cgconfig
+systemctl enable cgconfig
+systemctl start cgconfig
 
 echo """
 Useage
