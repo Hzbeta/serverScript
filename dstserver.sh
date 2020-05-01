@@ -62,9 +62,16 @@ group dstserver {
 systemctl enable cgconfig
 systemctl start cgconfig
 
+{
+    echo "alias dststart='cgexec -g cpu:dstserver su - dstserver -c \"~/dstserver start\"'"
+    echo "alias dststop='su - dstserver -c \"~/dstserver stop\"'"
+    echo "alias dstinfo='su - dstserver -c \"~/dstserver dt\"'"
+} >>~/.bashrc
+
 echo """
 Useage
 start : cgexec -g cpu:dstserver su - dstserver -c \"~/dstserver start\"
 stop : su - dstserver -c \"~/dstserver stop\"
+info : su - dstserver -c \"~/dstserver dt\"
 view log: tail -f /home/dstserver/.klei/DoNotStarveTogether/Cluster_1/Master/server_log.txt
 """
