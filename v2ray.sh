@@ -45,6 +45,14 @@ fi
 uuid=${1}
 port=${2}
 
+cat >>/etc/hosts <<EOF
+## Scholar 学术搜索
+2404:6800:4008:c06::be scholar.google.com
+2404:6800:4008:c06::be scholar.google.com.hk
+2404:6800:4008:c06::be scholar.google.com.tw
+2404:6800:4005:805::200e scholar.google.cn #www.google.cn
+EOF
+
 bash <(curl -s -L https://install.direct/go.sh)
 
 sed -i "s/\(\"port\"\s*:\)\s*[[:digit:]]\+/\1 ${port}/g" /etc/v2ray/config.json
