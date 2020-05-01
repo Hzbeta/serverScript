@@ -150,9 +150,9 @@ split=16
 # 单个任务下载速度限制, 默认:0
 #max-download-limit=0
 # 整体上传速度限制, 运行时可修改, 默认:0
-max-overall-upload-limit=512K
+max-overall-upload-limit=100K
 # 单个任务上传速度限制, 默认:0
-#max-upload-limit=1000
+max-upload-limit=50K
 # 禁用IPv6, 默认:false
 disable-ipv6=true
 # 支持GZip，默认:false
