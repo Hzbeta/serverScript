@@ -50,7 +50,10 @@ cat >>/etc/hosts <<EOF
 2404:6800:4008:c06::be scholar.google.com
 2404:6800:4008:c06::be scholar.google.com.hk
 2404:6800:4008:c06::be scholar.google.com.tw
-2404:6800:4005:805::200e scholar.google.cn #www.google.cn
+2401:3800:4001:10::101f scholar.google.cn
+2404:6800:4008:c06::be scholar.google.com.sg
+2404:6800:4008:c06::be scholar.l.google.com
+2404:6800:4008:803::2001 scholar.googleusercontent.com
 EOF
 
 bash <(curl -s -L https://install.direct/go.sh)
