@@ -44,7 +44,7 @@ EOF
 yum install curl
 bash <(curl -s -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
-cat >>${v2ray_config} <<EOF
+cat >${v2ray_config} <<EOF
 {
   "inbounds": [{
     "port": "${port}",
