@@ -23,27 +23,13 @@ Check_is_Root_in_CentOS() {
 Check_is_Root_in_CentOS
 
 if [[ -z "${1}" || -z "${2}" ]]; then
-    echo -e "Usage: ${0} uuid port [kcp|ws]"
+    echo -e "Usage: ${0} uuid port"
     exit 0
 fi
 
-if [ -n "${3}" ]; then
-    case "${3}" in
-    "kcp")
-        jqStr='.inbounds[0]+={"streamSettings":{"network":"mkcp","kcpSettings":{"header":{"type":"utp"}}}}'
-        ;;
-    "ws")
-        jqStr='.inbounds[0]+={"streamSettings":{"network":"ws"}}'
-        ;;
-    *)
-        echo -e "Usage: ${0} uuid port [kcp|ws]"
-        exit 0
-        ;;
-    esac
-fi
-
-uuid=${1}
-port=${2}
+export uuid=${1}
+export port=${2}
+v2ray_config="/usr/local/etc/v2ray/config.json"
 
 cat >>/etc/hosts <<EOF
 ## Scholar 学术搜索
@@ -55,17 +41,43 @@ cat >>/etc/hosts <<EOF
 2404:6800:4008:c06::be scholar.l.google.com
 2404:6800:4008:803::2001 scholar.googleusercontent.com
 EOF
+yum install curl
+bash <(curl -s -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
-bash <(curl -s -L https://install.direct/go.sh)
-
-sed -i "s/\(\"port\"\s*:\)\s*[[:digit:]]\+/\1 ${port}/g" /etc/v2ray/config.json
-sed -i "s/\(\"id\"\s*:\)\s*\".*\"/\1 \"${uuid}\"/g" /etc/v2ray/config.json
-
-if [ -n "${jqStr}" ]; then
-    yum -y install jq
-    mv /etc/v2ray/config.json /etc/v2ray/config.bak
-    jq "${jqStr}" /etc/v2ray/config.bak >/etc/v2ray/config.json
-fi
+cat >>${v2ray_config} <<EOF
+{
+  "inbounds": [{
+    "port": "${port}",
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "${uuid}",
+          "level": 1,
+          "alterId": 64
+        }
+      ]
+    }
+  }],
+  "outbounds": [{
+    "protocol": "freedom",
+    "settings": {}
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  }],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "blocked"
+      }
+    ]
+  }
+}
+EOF
 
 firewall-cmd --permanent --zone=public --add-port="${port}"/tcp
 firewall-cmd --reload
