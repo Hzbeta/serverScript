@@ -41,8 +41,8 @@ cat >>/etc/hosts <<EOF
 2404:6800:4008:c06::be scholar.l.google.com
 2404:6800:4008:803::2001 scholar.googleusercontent.com
 EOF
-yum install curl
-bash <(curl -s -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+yum install -y curl
+bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 cat >${v2ray_config} <<EOF
 {
