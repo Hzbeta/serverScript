@@ -31,48 +31,73 @@ export uuid=${1}
 export port=${2}
 v2ray_config="/usr/local/etc/v2ray/config.json"
 
-cat >>/etc/hosts <<EOF
-## Scholar 学术搜索
-2404:6800:4008:c06::be scholar.google.com
-2404:6800:4008:c06::be scholar.google.com.hk
-2404:6800:4008:c06::be scholar.google.com.tw
-2401:3800:4001:10::101f scholar.google.cn
-2404:6800:4008:c06::be scholar.google.com.sg
-2404:6800:4008:c06::be scholar.l.google.com
-2404:6800:4008:803::2001 scholar.googleusercontent.com
-EOF
 yum install curl
 bash <(curl -s -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 cat >${v2ray_config} <<EOF
 {
-  "inbounds": [{
-    "port": "${port}",
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
-        {
-          "id": "${uuid}",
-          "level": 1,
-          "alterId": 64
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": "${port}",
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid}",
+            "level": 1,
+            "alterId": 64
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {
+          "header": {
+            "type": "http",
+            "response": {
+              "version": "1.1",
+              "status": "200",
+              "reason": "OK",
+              "headers": {
+                "Content-Type": [
+                  "application/octet-stream",
+                  "video/mpeg"
+                ],
+                "Transfer-Encoding": [
+                  "chunked"
+                ],
+                "Connection": [
+                  "keep-alive"
+                ],
+                "Pragma": "no-cache"
+              }
+            }
+          }
         }
-      ]
+      }
     }
-  }],
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  },{
-    "protocol": "blackhole",
-    "settings": {},
-    "tag": "blocked"
-  }],
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
   "routing": {
+    "domainStrategy": "IPOnDemand",
     "rules": [
       {
         "type": "field",
-        "ip": ["geoip:private"],
-        "outboundTag": "blocked"
+        "outboundTag": "adblock",
+        "domain": [
+          "geosite:category-ads"
+        ]
       }
     ]
   }
