@@ -31,8 +31,8 @@ export uuid=${1}
 export port=${2}
 v2ray_config="/usr/local/etc/v2ray/config.json"
 
-yum install curl
-bash <(curl -s -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+yum install -y curl
+bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 cat >${v2ray_config} <<EOF
 {
